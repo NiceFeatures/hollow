@@ -1,32 +1,38 @@
 {
   "name": "hollowclient",
-  "version": "1.1.0",
-  "description": "",
+  "version": "1.2.0",
+  "description": "Hollow Knight Save Editor with Silksong Theme",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "start": "webpack-dev-server --open"
+    "start": "webpack-dev-server --open",
+    "security-check": "npm audit",
+    "security-fix": "npm audit fix"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "hollow-knight",
+    "save-editor",
+    "silksong",
+    "react"
+  ],
+  "author": "bloodorca",
   "license": "ISC",
   "devDependencies": {
-    "aes-js": "^3.1.1",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.4",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "css-loader": "^2.1.1",
-    "html-webpack-plugin": "^3.2.0",
-    "react": "^16.4.1",
-    "react-dom": ">=16.4.2",
-    "style-loader": "^0.21.0",
-    "text-encoding": "^0.6.4",
-    "webpack": "^4.13.0",
-    "webpack-cli": "^3.0.8",
-    "webpack-dev-server": "^3.7.1"
+    "@babel/core": "^7.24.0",
+    "@babel/plugin-transform-class-properties": "^7.27.1",
+    "@babel/preset-env": "^7.24.0",
+    "@babel/preset-react": "^7.24.0",
+    "aes-js": "^3.1.2",
+    "babel-loader": "^9.1.3",
+    "css-loader": "^6.10.0",
+    "html-webpack-plugin": "^5.6.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "style-loader": "^3.3.4",
+    "text-encoding": "^0.7.0",
+    "webpack": "^5.90.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.0"
   }
 }

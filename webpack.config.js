@@ -1,22 +1,33 @@
-var path = require("path")
-var HtmlWebpackPlugin = require("html-webpack-plugin")
+const path = require("path")
+const HtmlWebpackPlugin = require("html-webpack-plugin")
 
 module.exports = {
     entry: "./src/index.js",
     output: {
         path: path.resolve(__dirname, "docs"),
-        filename: "bundle.js"
+        filename: "bundle.js",
+        clean: true
     },
     devtool: 'inline-source-map',
     devServer: {
-        contentBase: "./docs",
+        static: {
+            directory: path.join(__dirname, "docs")
+        },
         port: 8080,
-        compress: true
+        compress: true,
+        open: true
     },
     module: {
         rules: [
-            { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"},
-            { test: /\.css$/, loader: ["style-loader", "css-loader"]}
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: "babel-loader"
+            },
+            {
+                test: /\.css$/,
+                use: ["style-loader", "css-loader"]
+            }
         ]
     },
     plugins: [
