@@ -1,12 +1,14 @@
 const path = require("path")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 
 module.exports = {
     entry: "./src/index.js",
     output: {
         path: path.resolve(__dirname, "docs"),
         filename: "bundle.js",
-        clean: true
+        clean: true,
+        assetModuleFilename: 'assets/[name][ext]'
     },
     devtool: 'inline-source-map',
     devServer: {
@@ -26,12 +28,20 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: ["style-loader", "css-loader"]
+                use: [MiniCssExtractPlugin.loader, "css-loader"]
+            },
+            {
+                test: /\.(png|jpe?g|gif|webp|svg)$/i,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'assets/images/[name][ext]'
+                }
             }
         ]
     },
     plugins: [
-        new HtmlWebpackPlugin({template: './src/index.html'})
+        new HtmlWebpackPlugin({template: './src/index.html'}),
+        new MiniCssExtractPlugin({filename: 'styles.css'})
     ],
     mode: "development",
     target: "web"
