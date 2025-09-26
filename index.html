@@ -180,7 +180,8 @@
     </style>
 </head>
 <body>
-    <div id="container">
+    <!-- Container para nossa interface estilizada (escondida por padrão) -->
+    <div id="container" style="display: none;">
         <h1>Hollow Knight & Silksong Save Editor</h1>
 
         <div class="description">
@@ -227,155 +228,241 @@
         <div id="successSection" class="success hidden"></div>
     </div>
 
-        <script src="bundle.js"></script>
-        <script>
-            // Main application variables
-            let currentFileName = '';
-            let originalData = '';
+    <!-- React app do bundle.js (visível por padrão) -->
+    <div id="root"></div>
 
-            const uploadArea = document.getElementById('uploadArea');
-            const fileInput = document.getElementById('fileInput');
-            const editorSection = document.getElementById('editorSection');
-            const jsonEditor = document.getElementById('jsonEditor');
-            const fileInfo = document.getElementById('fileInfo');
-            const errorSection = document.getElementById('errorSection');
-            const successSection = document.getElementById('successSection');
-            const switchMode = document.getElementById('switchMode');
+    <script src="bundle.js"></script>
+  <script>
+      // Nosso script de interface funcional
+      let currentFileName = '';
+      let originalData = '';
 
-            function showError(message) {
-                errorSection.textContent = message;
-                errorSection.classList.remove('hidden');
-                successSection.classList.add('hidden');
-                setTimeout(() => {
-                    errorSection.classList.add('hidden');
-                }, 8000);
-            }
+      const uploadArea = document.getElementById('uploadArea');
+      const fileInput = document.getElementById('fileInput');
+      const editorSection = document.getElementById('editorSection');
+      const jsonEditor = document.getElementById('jsonEditor');
+      const fileInfo = document.getElementById('fileInfo');
+      const errorSection = document.getElementById('errorSection');
+      const successSection = document.getElementById('successSection');
+      const switchMode = document.getElementById('switchMode');
 
-            function showSuccess(message) {
-                successSection.textContent = message;
-                successSection.classList.remove('hidden');
-                errorSection.classList.add('hidden');
-                setTimeout(() => {
-                    successSection.classList.add('hidden');
-                }, 5000);
-            }
+      function showError(message) {
+          errorSection.textContent = message;
+          errorSection.classList.remove('hidden');
+          successSection.classList.add('hidden');
+          setTimeout(() => {
+              errorSection.classList.add('hidden');
+          }, 8000);
+      }
 
-            // Upload area click handler
-            uploadArea.addEventListener('click', () => {
-                fileInput.click();
-            });
+      function showSuccess(message) {
+          successSection.textContent = message;
+          successSection.classList.remove('hidden');
+          errorSection.classList.add('hidden');
+          setTimeout(() => {
+              successSection.classList.add('hidden');
+          }, 5000);
+      }
 
-            // File input change handler
-            fileInput.addEventListener('change', (e) => {
-                if (e.target.files.length > 0) {
-                    handleFile(e.target.files[0]);
-                }
-            });
+      // Upload area click handler
+      uploadArea.addEventListener('click', () => {
+          fileInput.click();
+      });
 
-            // Drag and drop handlers
-            uploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadArea.classList.add('dragover');
-            });
+      // File input change handler
+      fileInput.addEventListener('change', (e) => {
+          if (e.target.files.length > 0) {
+              handleFile(e.target.files[0]);
+          }
+      });
 
-            uploadArea.addEventListener('dragleave', () => {
-                uploadArea.classList.remove('dragover');
-            });
+      // Drag and drop handlers
+      uploadArea.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          uploadArea.classList.add('dragover');
+      });
 
-            uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadArea.classList.remove('dragover');
+      uploadArea.addEventListener('dragleave', () => {
+          uploadArea.classList.remove('dragover');
+      });
 
-                if (e.dataTransfer.files.length > 0) {
-                    handleFile(e.dataTransfer.files[0]);
-                }
-            });
+      uploadArea.addEventListener('drop', (e) => {
+          e.preventDefault();
+          uploadArea.classList.remove('dragover');
 
-            async function handleFile(file) {
-                currentFileName = file.name;
+          if (e.dataTransfer.files.length > 0) {
+              handleFile(e.dataTransfer.files[0]);
+          }
+      });
 
-                try {
-                    let jsonData;
+      async function handleFile(file) {
+          currentFileName = file.name;
 
-                    if (switchMode.checked) {
-                        // Switch mode - read as text
-                        jsonData = await file.text();
-                    } else {
-                        // PC mode - read as binary and decrypt using bundle.js functions
-                        const bytes = new Uint8Array(await file.arrayBuffer());
-                        jsonData = Decode(bytes);
-                    }
+          try {
+              let jsonData;
 
-                    // Parse and reformat JSON
-                    const parsed = JSON.parse(jsonData);
-                    originalData = JSON.stringify(parsed, null, 2);
+              if (switchMode.checked) {
+                  // Switch mode - read as text
+                  jsonData = await file.text();
+              } else {
+                  // PC mode - read as binary and decrypt using bundle.js functions
+                  const bytes = new Uint8Array(await file.arrayBuffer());
+                  jsonData = Decode(bytes);
+              }
 
-                    jsonEditor.value = originalData;
-                    fileInfo.textContent = `Loaded: ${currentFileName}`;
-                    editorSection.classList.remove('hidden');
-                    showSuccess('Save file loaded successfully!');
+              // Parse and reformat JSON
+              const parsed = JSON.parse(jsonData);
+              originalData = JSON.stringify(parsed, null, 2);
 
-                } catch (error) {
-                    showError('Error loading file: ' + error.message + '\nMake sure this is a valid Hollow Knight save file.');
-                }
-            }
+              jsonEditor.value = originalData;
+              fileInfo.textContent = `Loaded: ${currentFileName}`;
+              editorSection.classList.remove('hidden');
+              showSuccess('Save file loaded successfully!');
 
-            function resetEditor() {
-                jsonEditor.value = originalData;
-                showSuccess('Editor reset to original data');
-            }
+          } catch (error) {
+              showError('Error loading file: ' + error.message + '\nMake sure this is a valid Hollow Knight save file.');
+          }
+      }
 
-            function downloadSwitchSave() {
-                try {
-                    const jsonData = jsonEditor.value;
-                    JSON.parse(jsonData); // Validate JSON
+      function resetEditor() {
+          jsonEditor.value = originalData;
+          showSuccess('Editor reset to original data');
+      }
 
-                    const blob = new Blob([jsonData], { type: 'text/plain' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'plain.dat';
-                    a.click();
-                    URL.revokeObjectURL(url);
+      function downloadSwitchSave() {
+          try {
+              const jsonData = jsonEditor.value;
+              JSON.parse(jsonData); // Validate JSON
 
-                    showSuccess('Switch save file downloaded successfully!');
+              const blob = new Blob([jsonData], { type: 'text/plain' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = 'plain.dat';
+              a.click();
+              URL.revokeObjectURL(url);
 
-                } catch (error) {
-                    showError('Invalid JSON data. Please fix the JSON syntax.');
-                }
-            }
+              showSuccess('Switch save file downloaded successfully!');
 
-            async function downloadPCSave() {
-                try {
-                    const jsonData = jsonEditor.value;
-                    JSON.parse(jsonData); // Validate JSON
+          } catch (error) {
+              showError('Invalid JSON data. Please fix the JSON syntax.');
+          }
+      }
 
-                    const encryptedData = Encode(jsonData);
-                    const blob = new Blob([encryptedData], { type: 'application/octet-stream' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'user1.dat';
-                    a.click();
-                    URL.revokeObjectURL(url);
+      async function downloadPCSave() {
+          try {
+              const jsonData = jsonEditor.value;
+              JSON.parse(jsonData); // Validate JSON
 
-                    showSuccess('PC save file downloaded successfully!');
+              const encryptedData = Encode(jsonData);
+              const blob = new Blob([encryptedData], { type: 'application/octet-stream' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = 'user1.dat';
+              a.click();
+              URL.revokeObjectURL(url);
 
-                } catch (error) {
-                    showError('Error encrypting save file: ' + error.message);
-                }
-            }
+              showSuccess('PC save file downloaded successfully!');
 
-            // Switch mode change handler
-            switchMode.addEventListener('change', () => {
-                // Clear current file when switching modes
-                if (currentFileName) {
-                    jsonEditor.value = '';
-                    editorSection.classList.add('hidden');
-                    currentFileName = '';
-                    originalData = '';
-                }
-            });
-        </script>
+          } catch (error) {
+              showError('Error encrypting save file: ' + error.message);
+          }
+      }
+
+      // Switch mode change handler
+      switchMode.addEventListener('change', () => {
+          // Clear current file when switching modes
+          if (currentFileName) {
+              jsonEditor.value = '';
+              editorSection.classList.add('hidden');
+              currentFileName = '';
+              originalData = '';
+          }
+      });
+
+      // Expor funções do bundle.js globalmente
+      function exposeBundleFunctions() {
+          try {
+              // Procurar em todos os módulos webpack pelas funções Decode e Encode
+              if (typeof __webpack_require__ !== 'undefined') {
+                  // Procurar em todos os módulos instalados
+                  for (let moduleId in __webpack_require__.c) {
+                      const module = __webpack_require__.c[moduleId];
+                      if (module.exports && module.exports.Decode && module.exports.Encode) {
+                          window.Decode = module.exports.Decode;
+                          window.Encode = module.exports.Encode;
+                          console.log('Funções encontradas no módulo:', moduleId);
+                          return true;
+                      }
+                  }
+
+                  // Tentar módulos comuns
+                  const commonModules = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30];
+                  for (let moduleId of commonModules) {
+                      try {
+                          const module = __webpack_require__(moduleId);
+                          if (module && module.Decode && module.Encode) {
+                              window.Decode = module.Decode;
+                              window.Encode = module.Encode;
+                              console.log('Funções encontradas no módulo:', moduleId);
+                              return true;
+                          }
+                      } catch (e) {
+                          // Continuar
+                      }
+                  }
+              }
+
+              console.error('Funções Decode/Encode não encontradas');
+              return false;
+          } catch (e) {
+              console.error('Erro ao expor funções:', e);
+              return false;
+          }
+      }
+
+      // Quando as funções estiverem disponíveis, ativar nossa interface
+      function activateOurInterface() {
+          if (window.Decode && window.Encode) {
+              console.log('Funções disponíveis, ativando nossa interface');
+
+              // Esconder React app
+              const rootDiv = document.getElementById('root');
+              if (rootDiv) {
+                  rootDiv.style.display = 'none';
+              }
+
+              // Mostrar nossa interface
+              const container = document.getElementById('container');
+              if (container) {
+                  container.style.display = 'block';
+              }
+          } else {
+              console.log('Funções ainda não disponíveis, tentando novamente...');
+          }
+      }
+
+      // Tentar expor e ativar
+      setTimeout(() => {
+          if (exposeBundleFunctions()) {
+              activateOurInterface();
+          } else {
+              // Tentar novamente após um delay
+              setTimeout(() => {
+                  exposeBundleFunctions();
+                  activateOurInterface();
+              }, 500);
+          }
+      }, 100);
+
+      // Verificar periodicamente
+      setInterval(() => {
+          if (!window.Decode || !window.Encode) {
+              exposeBundleFunctions();
+          }
+          activateOurInterface();
+      }, 1000);
+  </script>
 </body>
 </html>
