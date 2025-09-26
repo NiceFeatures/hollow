@@ -13,6 +13,7 @@ yarn-error.log*
 docs/bundle.js
 
 # Development
+.claude
 .env
 .env.local
 .env.development.local
