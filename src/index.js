@@ -1,6 +1,6 @@
 import React, { Fragment } from "react"
 import ReactDOM from "react-dom"
-import { Encode, Decode, Hash, DownloadData, HumanTime } from "./functions.js"
+import { Encode, Decode, Hash, DownloadData, HumanTime, FormatDateTime } from "./functions.js"
 import History from "./history.js"
 import WindowDrag from "./windowDrag.js"
 import "./style.css"
@@ -161,8 +161,21 @@ class HistoryComponent extends React.Component {
                             }} 
                             className="history-item"
                         >
-                            <div className="history-name">HASH {item.hash}</div>
-                            <div className="history-date">{HumanTime(item.date)}</div>
+                            <div className="history-item-content">
+                                <div className="history-name">{FormatDateTime(item.date)}</div>
+                                <div className="history-date">{HumanTime(item.date)}</div>
+                            </div>
+                            <button
+                                className="history-remove-btn"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    history.removeFromHistory(item.hash);
+                                    history.syncToLocalStorage();
+                                }}
+                                title="Remover do histórico"
+                            >
+                                ×
+                            </button>
                         </li>
                     ))}
                 </ul>

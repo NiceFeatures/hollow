@@ -111,11 +111,11 @@ function round(value, precision){
 
 export function HumanTime(date){
     var minutes = (new Date() - date) / 1000 / 60
-    var hours = minutes / 60  
+    var hours = minutes / 60
     var days = hours / 24
     var weeks = days / 7
-    var months = weeks / 4 
-    var years = months / 12 
+    var months = weeks / 4
+    var years = months / 12
 
     if (minutes < 1){
         return "now"
@@ -129,9 +129,20 @@ export function HumanTime(date){
         return `about ${round(weeks, 0)} weeks ago`
     } else if (months < 24){
         return `about ${round(months, 1)} months ago`
-    } 
+    }
 
     return `about ${round(years, 1)} years ago`
+}
+
+export function FormatDateTime(date){
+    return date.toLocaleString('pt-BR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    })
 }
 
 export function DownloadData(data, fileName){

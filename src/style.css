@@ -151,9 +151,13 @@ body {
 }
 
 .history-item {
-  background-color: white; 
+  background-color: white;
   padding: 5px;
   user-select: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
 }
 
 .history-item:hover {
@@ -162,6 +166,38 @@ body {
 
 .history-item:active {
   background-color: #ddd;
+}
+
+.history-remove-btn {
+  background: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  transition: all 0.2s ease;
+}
+
+.history-remove-btn:hover {
+  background: #cc0000;
+  transform: scale(1.1);
+}
+
+.history-remove-btn:active {
+  transform: scale(0.95);
+}
+
+.history-item-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 #cover {

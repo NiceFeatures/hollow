@@ -53,4 +53,7 @@ The Hollow Knight save folder location varies depending on your OS (Windows, Mac
 ---
 
 ## 🤝 Credits
-The decryption and encryption steps were taken from [@KayDeeTee](https://github.com/KayDeeTee)'s [Hollow Knight Save Manager](https://github.com/KayDeeTee/Hollow-Knight-SaveManager). 
+The decryption and encryption steps were taken from [@KayDeeTee](https://github.com/KayDeeTee)'s [Hollow Knight Save Manager](https://github.com/KayDeeTee/Hollow-Knight-SaveManager).
+
+## 📁 Repository
+GitHub Repository: https://github.com/NiceFeatures/hollow 
