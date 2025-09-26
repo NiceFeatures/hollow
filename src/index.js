@@ -4,7 +4,6 @@ import { Encode, Decode, Hash, DownloadData, HumanTime } from "./functions.js"
 import History from "./history.js"
 import WindowDrag from "./windowDrag.js"
 import "./style.css"
-import "../background/hk-ss.webp"
 
 var history = new History()
 var windowDrag = new WindowDrag()

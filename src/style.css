@@ -20,7 +20,7 @@ body {
   display: grid;
   justify-content: center;
   background-image:
-    url('../background/hk-ss.webp'),
+    url('./assets/images/hk-ss.webp'),
     linear-gradient(135deg, rgba(139, 0, 0, 0.9) 0%, rgba(165, 42, 42, 0.85) 50%, rgba(101, 67, 33, 0.9) 100%);
   background-size: cover, cover;
   background-position: center, center;
